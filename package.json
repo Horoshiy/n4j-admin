@@ -1,0 +1,39 @@
+{
+  "name": "n4j-admin",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Vue 3 admin panel for n4j.dinamchiki.ru — управление контентом dinamost.ru через GraphQL",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "type-check": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "@tiptap/extension-image": "^3.31.0",
+    "@tiptap/extension-link": "^3.31.0",
+    "@tiptap/extension-table": "^3.31.0",
+    "@tiptap/extension-table-cell": "^3.31.0",
+    "@tiptap/extension-table-header": "^3.31.0",
+    "@tiptap/extension-table-row": "^3.31.0",
+    "@tiptap/starter-kit": "^3.31.0",
+    "@tiptap/vue-3": "^3.31.0",
+    "graphql": "^16.9.0",
+    "graphql-request": "^7.1.2",
+    "pinia": "^2.2.6",
+    "vue": "^3.5.13",
+    "vue-draggable-plus": "^0.6.1",
+    "vue-router": "^4.4.5"
+  },
+  "devDependencies": {
+    "@tsconfig/node22": "^22.0.6",
+    "@types/node": "^22.7.4",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vue/tsconfig": "^0.7.0",
+    "sass-embedded": "^1.81.0",
+    "typescript": "~5.6.2",
+    "vite": "^5.4.11",
+    "vue-tsc": "^2.1.10"
+  }
+}
