@@ -68,6 +68,9 @@ export interface PageContent {
 export interface Socials {
   vk: string | null
   youtube: string | null
+  instagram: string | null
+  telegram: string | null
+  max: string | null
 }
 
 export interface ContactInfo {

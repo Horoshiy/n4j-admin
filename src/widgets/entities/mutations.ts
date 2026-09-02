@@ -288,7 +288,7 @@ export async function updateContactInfo(
     `mutation U($input: ContactInfoInput!) {
       updateContactInfo(input: $input) {
         phone phoneFormatted whatsapp telegram email legalAddress address workingHours inn
-        socials { vk youtube }
+        socials { vk youtube instagram telegram max }
       }
     }`,
     { input },

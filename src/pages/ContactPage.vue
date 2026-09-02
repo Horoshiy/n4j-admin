@@ -25,7 +25,7 @@ async function load(): Promise<void> {
       {
         contactInfo {
           phone phoneFormatted whatsapp telegram email legalAddress address workingHours inn
-          socials { vk youtube }
+          socials { vk youtube instagram telegram max }
         }
       }
     `)
@@ -103,6 +103,9 @@ onMounted(load)
         <div class="form__row">
           <label>VK<input v-model="form.socials.vk" type="url" placeholder="https://vk.com/..." /></label>
           <label>YouTube<input v-model="form.socials.youtube" type="url" placeholder="https://youtube.com/..." /></label>
+          <label>Instagram<input v-model="form.socials.instagram" type="url" placeholder="https://instagram.com/..." /></label>
+          <label>Telegram (доп.)<input v-model="form.socials.telegram" type="url" placeholder="https://t.me/..." /></label>
+          <label>MAX<input v-model="form.socials.max" type="url" placeholder="https://max.ru/..." /></label>
         </div>
       </fieldset>
 
