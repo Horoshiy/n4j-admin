@@ -57,12 +57,19 @@ export interface TrainingStep {
   iconKey: string
 }
 
+export interface FaqItem {
+  id: string
+  question: string
+  answer: string
+}
+
 export interface PageContent {
   hero: HeroContent
   stats: StatItem[]
   features: FeatureItem[]
   programs: AgeProgram[]
   trainingSteps: TrainingStep[]
+  faq: FaqItem[]
 }
 
 export interface Socials {

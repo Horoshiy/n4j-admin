@@ -101,11 +101,31 @@ const form = ref<TeamForm>(emptyForm())
 const formError = ref<string | null>(null)
 const formSaving = ref(false)
 
+/**
+ * Возрастные группы сайта. Список тот же, что в фильтре на /teams и в формах
+ * заявки; свободный ввод здесь недопустим — группа со значением вне набора
+ * не попадает ни в один фильтр и выпадает из витрины.
+ */
+const AGE_GROUPS = [
+  { value: '3-5',   label: '3–5 лет' },
+  { value: '6-7',   label: '6–7 лет' },
+  { value: '8-10',  label: '8–10 лет' },
+  { value: '11-14', label: '11–14 лет' },
+] as const
+
+/** Подпись подставляем из выбранной группы, если редактор её не менял вручную. */
+function syncAgeLabel(): void {
+  const picked = AGE_GROUPS.find((a) => a.value === form.value.ageGroup)
+  if (!picked) return
+  const wasAuto = AGE_GROUPS.some((a) => a.label === form.value.ageLabel) || !form.value.ageLabel
+  if (wasAuto) form.value.ageLabel = picked.label
+}
+
 function emptyForm(): TeamForm {
   return {
     id: null,
     name: '',
-    ageGroup: 'A8_10',
+    ageGroup: '8-10',
     ageLabel: '8–10 лет',
     description: '',
     playersCount: 0,
@@ -303,11 +323,8 @@ const { save: saveReorder } = useReorder<Team>({
       </div>
       <div class="form__row form__row--2">
         <label>Возрастная группа
-          <select v-model="form.ageGroup">
-            <option value="A5_7">5–7 лет</option>
-            <option value="A8_10">8–10 лет</option>
-            <option value="A11_14">11–14 лет</option>
-            <option value="MIXED">смешанная</option>
+          <select v-model="form.ageGroup" @change="syncAgeLabel">
+            <option v-for="a in AGE_GROUPS" :key="a.value" :value="a.value">{{ a.label }}</option>
           </select>
         </label>
         <label>Подпись (ageLabel)<input v-model="form.ageLabel" type="text" placeholder="8–10 лет" /></label>

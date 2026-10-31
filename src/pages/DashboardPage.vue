@@ -17,6 +17,19 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { VueDraggable } from 'vue-draggable-plus'
+
+/**
+ * HERO закреплён первым и не перетаскивается.
+ *
+ * 3 сентября секции в этом дашборде перетащили, HERO уехал на третье место,
+ * и главная стала открываться таблицей «Клуб в цифрах» вместо названия клуба.
+ * Ручку у HERO не рендерим, а `move` не даёт вставить другую секцию перед ним.
+ */
+function onMove(evt: { related?: HTMLElement | null; willInsertAfter?: boolean }): boolean {
+  const kind = evt.related?.dataset?.kind
+  if (kind === 'HERO' && evt.willInsertAfter === false) return false
+  return true
+}
 import { fetchPageLayouts } from '@/widgets/entities/queries'
 import { updatePageLayout, type PageSectionInput } from '@/widgets/entities/mutations'
 import { gqlRequest } from '@/shared/api/gql'
@@ -240,15 +253,26 @@ onMounted(load)
           v-model="layout.sections"
           :animation="180"
           handle=".section__handle"
+          :move="onMove"
           class="section-list"
         >
           <div
             v-for="section in layout.sections"
             :key="`${section.kind}-${section.collection}-${section.order}`"
             class="section"
-            :class="{ 'section--hidden': !section.visible }"
+            :class="{ 'section--hidden': !section.visible, 'section--pinned': section.kind === 'HERO' }"
+            :data-kind="section.kind"
           >
-            <span class="section__handle" title="Перетащить">⋮⋮</span>
+            <span
+              v-if="section.kind !== 'HERO'"
+              class="section__handle"
+              title="Перетащить"
+            >⋮⋮</span>
+            <span
+              v-else
+              class="section__handle section__handle--pinned"
+              title="Первый экран закреплён: герой всегда идёт первым"
+            >📌</span>
             <span class="section__icon">{{ KIND_ICONS[section.kind] }}</span>
             <button
               type="button"
@@ -430,6 +454,15 @@ onMounted(load)
   font-size: $font-size-base;
   font-weight: $font-weight-medium;
   &:hover { color: $brand-primary; text-decoration: underline; }
+}
+
+.section__handle--pinned {
+  cursor: default;
+  opacity: 0.65;
+}
+
+.section--pinned {
+  background: #f5f8ff;
 }
 
 .section__kind {

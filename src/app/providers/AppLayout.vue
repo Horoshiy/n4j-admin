@@ -53,7 +53,7 @@ const expiresLabel = computed(() => {
   <div class="layout">
     <header class="layout__header">
       <div class="layout__brand">
-        <span class="layout__logo">⚽</span>
+        <img class="layout__logo" src="/logo/dinamchiki-blue-96.png" srcset="/logo/dinamchiki-blue-96.png 96w, /logo/dinamchiki-blue-192.png 192w" sizes="28px" width="28" height="28" alt="" />
         <span class="layout__title">DFC Админка</span>
       </div>
       <div class="layout__user">
@@ -113,7 +113,9 @@ const expiresLabel = computed(() => {
 }
 
 .layout__logo {
-  font-size: 24px;
+  display: block;
+  object-fit: contain;
+  flex: 0 0 auto;
 }
 
 .layout__title {

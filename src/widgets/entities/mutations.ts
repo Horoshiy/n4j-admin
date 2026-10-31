@@ -338,3 +338,119 @@ export async function updatePageLayout(
   )
   return data.updatePageLayout
 }
+
+// ─── Inline-edit одной строки (шаг 6.2) ────────────────────────────────────
+//
+// Каждая мутация дёргает update{Group}Item на бэкенде, который точечно
+// патчит один объект в массиве (по id). Возвращает обновлённый PageContent,
+// чтобы UI мог сразу подменить state без рефетча.
+
+export interface StatItemPatchInput {
+  value?: string
+  label?: string
+  caption?: string
+  iconKey?: string
+}
+
+export interface FeatureItemPatchInput {
+  title?: string
+  description?: string
+  iconKey?: string
+}
+
+export interface AgeProgramPatchInput {
+  ageLabel?: string
+  title?: string
+  description?: string
+  ageGroup?: string
+}
+
+export interface FaqItemPatchInput {
+  question?: string
+  answer?: string
+}
+
+export interface TrainingStepPatchInput {
+  title?: string
+  description?: string
+  iconKey?: string
+}
+
+const PAGE_CONTENT_FIELDS_FOR_INLINE = `
+  hero { eyebrow titleLead titleAccent description ctaPrimary ctaSecondary }
+  stats { id value label caption iconKey }
+  features { id iconKey title description }
+  programs { id ageLabel title description ageGroup }
+  trainingSteps { id title description iconKey }
+  faq { id question answer }
+`
+
+export async function updateStatItem(
+  slug: string,
+  id: string,
+  input: StatItemPatchInput,
+): Promise<PageContent> {
+  const data = await gqlRequest<{ updateStatItem: PageContent }>(
+    `mutation U($slug: String!, $id: ID!, $input: StatItemPatch!) {
+      updateStatItem(slug: $slug, id: $id, input: $input) { ${PAGE_CONTENT_FIELDS_FOR_INLINE} }
+    }`,
+    { slug, id, input },
+  )
+  return data.updateStatItem
+}
+
+export async function updateFeatureItem(
+  slug: string,
+  id: string,
+  input: FeatureItemPatchInput,
+): Promise<PageContent> {
+  const data = await gqlRequest<{ updateFeatureItem: PageContent }>(
+    `mutation U($slug: String!, $id: ID!, $input: FeatureItemPatch!) {
+      updateFeatureItem(slug: $slug, id: $id, input: $input) { ${PAGE_CONTENT_FIELDS_FOR_INLINE} }
+    }`,
+    { slug, id, input },
+  )
+  return data.updateFeatureItem
+}
+
+export async function updateProgramItem(
+  slug: string,
+  id: string,
+  input: AgeProgramPatchInput,
+): Promise<PageContent> {
+  const data = await gqlRequest<{ updateProgramItem: PageContent }>(
+    `mutation U($slug: String!, $id: ID!, $input: AgeProgramPatch!) {
+      updateProgramItem(slug: $slug, id: $id, input: $input) { ${PAGE_CONTENT_FIELDS_FOR_INLINE} }
+    }`,
+    { slug, id, input },
+  )
+  return data.updateProgramItem
+}
+
+export async function updateTrainingStepItem(
+  slug: string,
+  id: string,
+  input: TrainingStepPatchInput,
+): Promise<PageContent> {
+  const data = await gqlRequest<{ updateTrainingStepItem: PageContent }>(
+    `mutation U($slug: String!, $id: ID!, $input: TrainingStepPatch!) {
+      updateTrainingStepItem(slug: $slug, id: $id, input: $input) { ${PAGE_CONTENT_FIELDS_FOR_INLINE} }
+    }`,
+    { slug, id, input },
+  )
+  return data.updateTrainingStepItem
+}
+
+export async function updateFaqItem(
+  slug: string,
+  id: string,
+  input: FaqItemPatchInput,
+): Promise<PageContent> {
+  const data = await gqlRequest<{ updateFaqItem: PageContent }>(
+    `mutation U($slug: String!, $id: ID!, $input: FaqItemPatch!) {
+      updateFaqItem(slug: $slug, id: $id, input: $input) { ${PAGE_CONTENT_FIELDS_FOR_INLINE} }
+    }`,
+    { slug, id, input },
+  )
+  return data.updateFaqItem
+}

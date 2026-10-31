@@ -37,7 +37,7 @@ async function onSubmit(): Promise<void> {
   <div class="login">
     <div class="login__card">
       <div class="login__brand">
-        <div class="login__logo">⚽</div>
+        <img class="login__logo" src="/logo/dinamchiki-blue-192.png" width="56" height="56" alt="ДФК «Динамчики»" />
         <h1 class="login__title">DFC Динамчики</h1>
         <p class="login__subtitle">Панель администратора</p>
       </div>
@@ -112,9 +112,9 @@ async function onSubmit(): Promise<void> {
 }
 
 .login__logo {
-  font-size: 48px;
-  line-height: 1;
-  margin-bottom: $space-2;
+  display: block;
+  margin: 0 auto $space-2;
+  object-fit: contain;
 }
 
 .login__title {
