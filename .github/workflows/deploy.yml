@@ -1,0 +1,66 @@
+name: Deploy admin
+
+# push в main = выкладка админки на прод (dst.dinamchiki.ru).
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-dinamchiki-admin
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      # API админки — относительный /query на том же домене (src/app/config/env.ts).
+      - run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: admin
+          path: dist
+          retention-days: 7
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: production
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: admin
+          path: dist
+
+      - name: SSH
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          printf '%s\n' "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          cat > ~/.ssh/config <<CFG
+          Host prod
+            HostName ${{ secrets.SERVER_HOST }}
+            Port ${{ secrets.SERVER_PORT }}
+            User ${{ secrets.SERVER_USER }}
+            IdentityFile ~/.ssh/id_deploy
+            IdentitiesOnly yes
+          CFG
+
+      # --delay-updates: новые файлы подменяются разом в конце, index.html
+      # не начинает ссылаться на ещё не залитые assets.
+      - name: Выкладка
+        run: |
+          ssh prod 'mkdir -p /var/www/dst.dinamchiki.ru/html'
+          rsync -az --delete-after --delay-updates dist/ prod:/var/www/dst.dinamchiki.ru/html/

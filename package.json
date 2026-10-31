@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Vue 3 admin panel for n4j.dinamchiki.ru — управление контентом dinamost.ru через GraphQL",
+  "description": "Vue 3 admin panel for dst.dinamchiki.ru (прод) и n4j.dinamchiki.ru (бета) — управление контентом dinamost.ru через GraphQL",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
