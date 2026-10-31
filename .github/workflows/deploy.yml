@@ -63,4 +63,4 @@ jobs:
       - name: Выкладка
         run: |
           ssh prod 'mkdir -p /var/www/dst.dinamchiki.ru/html'
-          rsync -az --delete-after --delay-updates dist/ prod:/var/www/dst.dinamchiki.ru/html/
+          rsync -az --chmod=D755,F644 --delete-after --delay-updates dist/ prod:/var/www/dst.dinamchiki.ru/html/
