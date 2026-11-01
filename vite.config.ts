@@ -30,13 +30,12 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
     proxy: {
-      // /query* уходит на прод-бэкенд. На проде этот proxy не активен —
+      // /api/graphql уходит на бэкенд беты. В сборке этот proxy не активен —
       // бандл и бэкенд живут на одном домене.
-      '/query': {
+      '/api/graphql': {
         target: 'https://n4j.dinamchiki.ru',
         changeOrigin: true,
         secure: true,
-        rewrite: (path) => path.replace(/^\/query/, '/query'),
       },
       '/healthz': {
         target: 'https://n4j.dinamchiki.ru',
